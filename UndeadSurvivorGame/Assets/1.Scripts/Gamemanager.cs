@@ -5,6 +5,7 @@ using UnityEngine;
 public class Gamemanager : MonoBehaviour
 {
     public static Gamemanager instance;
+    public ObjectPoolManager pool;
     public PlayerMove player;
 
     private void Awake()
