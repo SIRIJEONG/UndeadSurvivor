@@ -4543,6 +4543,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   inputVec: {x: 0, y: 0}
+  scanner: {fileID: 0}
 --- !u!114 &239568521
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9251,7 +9252,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   prefabId: 1
-  damage: 11
+  damage: 5
   count: 2
   speed: 0
 --- !u!1 &688487596
@@ -9586,7 +9587,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   prefabId: 2
-  damage: 5
+  damage: 3
   count: 0
   speed: 0
 --- !u!1 &981060441
