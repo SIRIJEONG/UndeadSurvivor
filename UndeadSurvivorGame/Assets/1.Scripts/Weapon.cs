@@ -15,12 +15,7 @@ public class Weapon : MonoBehaviour
 
     private void Awake()
     {
-        player = GetComponentInParent<PlayerMove>();
-    }
-
-    private void Start()
-    {
-        Init();
+        player = Gamemanager.instance.player;
     }
 
     private void Update()
@@ -42,11 +37,7 @@ public class Weapon : MonoBehaviour
 
         }
 
-        //Test Code
-        if (Input.GetButtonDown("Jump"))
-        {
-            Levelup(20, 1);
-        }
+
     }
 
     public void Levelup(float damage , int count)
@@ -61,8 +52,26 @@ public class Weapon : MonoBehaviour
 
     }
 
-    public void Init()
+    public void Init(ItemData data)
     {
+        //Basic Set
+        name = "Weapon" + data.itemName;
+        transform.parent = player.transform;
+        transform.localPosition = Vector3.zero;
+        //Property Set
+        id = data.itemId;
+        damage = data.baseDamage;
+        count = data.baseCount;
+
+        for(int index = 0; index < Gamemanager.instance.pool.prefabs.Length; index++)
+        {
+            if(data.projectile == Gamemanager.instance.pool.prefabs[index])
+            {
+                prefabId = index;
+                break;
+            }
+        }
+
         switch (id)
         {
             case 0:
