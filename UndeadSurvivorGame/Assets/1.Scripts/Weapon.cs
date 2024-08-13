@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
@@ -50,12 +51,13 @@ public class Weapon : MonoBehaviour
             Setting();
         }
 
+        player.BroadcastMessage("ApplyGear", SendMessageOptions.DontRequireReceiver);
     }
 
     public void Init(ItemData data)
     {
         //Basic Set
-        name = "Weapon" + data.itemName;
+        name = "Weapon" + data.itemId;
         transform.parent = player.transform;
         transform.localPosition = Vector3.zero;
         //Property Set
@@ -79,9 +81,11 @@ public class Weapon : MonoBehaviour
                 Setting();
                 break;
             default:
-                speed = 0.3f;
+                speed = 0.4f;
                 break;
         }
+
+        player.BroadcastMessage("ApplyGear" , SendMessageOptions.DontRequireReceiver);  //특정 함수 호출을 모든 자식에게 방송하는 함수 
     }
 
     void Setting()
