@@ -12,7 +12,7 @@ public class Weapon : MonoBehaviour
     public float speed;
 
     float timer;
-    PlayerMove player;
+    Player player;
 
     private void Awake()
     {
@@ -21,6 +21,10 @@ public class Weapon : MonoBehaviour
 
     private void Update()
     {
+        if (!Gamemanager.instance.isLive)
+        {
+            return;
+        }
         switch (id)
         {
             case 0:

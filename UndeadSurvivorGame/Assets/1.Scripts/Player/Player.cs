@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMove : MonoBehaviour
+public class Player : MonoBehaviour
 {
     public float speed;
 
@@ -23,23 +23,27 @@ public class PlayerMove : MonoBehaviour
         scanner = GetComponent<Scanner>();  
         hands = GetComponentsInChildren<Hand>(true);
     }
-
-    void Start()
+    private void Update()
     {
-        
+        if(!Gamemanager.instance.isLive)
+        {
+            return;
+        }
+        inputVec.x = Input.GetAxisRaw("Horizontal");
+        inputVec.y = Input.GetAxisRaw("Vertical");
     }
 
     private void FixedUpdate()
-    {        
+    {
+        if (!Gamemanager.instance.isLive)
+        {
+            return;
+        }
         Vector2 nextVec = inputVec * speed * Time.fixedDeltaTime;
         //À§Ä¡
         rb.MovePosition(rb.position + nextVec);
     }
 
-    void OnMove(InputValue value)
-    {
-        inputVec = value.Get<Vector2>();
-    }
 
     private void LateUpdate()
     {
