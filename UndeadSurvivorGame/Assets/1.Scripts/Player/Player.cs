@@ -25,10 +25,9 @@ public class Player : MonoBehaviour
     }
     private void Update()
     {
-        if(!Gamemanager.instance.isLive)
-        {
+        if(!Gamemanager.instance.isLive)       
             return;
-        }
+        
         inputVec.x = Input.GetAxisRaw("Horizontal");
         inputVec.y = Input.GetAxisRaw("Vertical");
     }
@@ -52,6 +51,26 @@ public class Player : MonoBehaviour
         if (inputVec.x != 0)
         {
             sprite.flipX = inputVec.x < 0;
+        }
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (!Gamemanager.instance.isLive)
+        {
+            return;
+        }
+        Gamemanager.instance.health -= Time.deltaTime * 10;
+
+        if(Gamemanager.instance.health < 0)
+        {
+            for(int index = 2; index < transform.childCount; index++)
+            {
+                transform.GetChild(index).gameObject.SetActive(false);
+            }
+
+            animator.SetTrigger("Dead");
+            Gamemanager.instance.GameOver();
         }
     }
 }
