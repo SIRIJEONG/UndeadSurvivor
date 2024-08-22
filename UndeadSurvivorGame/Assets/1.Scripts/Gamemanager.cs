@@ -14,6 +14,7 @@ public class Gamemanager : MonoBehaviour
     public float gameTime;
     public float maxGameTime = 2 * 10f;
     [Header("# Player Info")]
+    public int playerId;
     public float health;
     public float maxHealth = 100;
     public int level;
@@ -24,18 +25,22 @@ public class Gamemanager : MonoBehaviour
     public ObjectPoolManager pool;
     public Player player;
     public LevelUp uiLevelUp;
-    public GameObject uiResult;
+    public Result uiResult;
+    public GameObject enemyCleaner;
 
     private void Awake()
     {
         instance = this;
     }
 
-    public void GameStart()
+    public void GameStart(int id)
     {
+        playerId = id;  
         health = maxHealth;
-        uiLevelUp.Select(0);
-        isLive = true;
+
+        player.gameObject.SetActive(true);
+        uiLevelUp.Select(playerId % 2);
+        Resume();
     }
 
     public void GameOver()
@@ -51,7 +56,29 @@ public class Gamemanager : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
         
-        uiResult.SetActive(true);
+        uiResult.gameObject.SetActive(true);
+        uiResult.Lose();
+        Stop();
+    }
+
+
+    public void GameVictory()
+    {
+
+        StartCoroutine(GameVictoryRoutine());
+
+    }
+
+    IEnumerator GameVictoryRoutine()
+    {
+        isLive = false;
+
+        enemyCleaner.SetActive(true);
+
+        yield return new WaitForSeconds(0.5f);
+
+        uiResult.gameObject.SetActive(true);
+        uiResult.Win();
         Stop();
     }
 
@@ -72,11 +99,16 @@ public class Gamemanager : MonoBehaviour
         if (gameTime > maxGameTime)
         {
             gameTime = maxGameTime;
+            GameVictory();
         }
     }
 
     public void GetExp()
     {
+        if(!isLive)
+        {
+            return;
+        }
         exp++;
 
         if(exp == nextExp[Mathf.Min(level , nextExp.Length - 1)])
