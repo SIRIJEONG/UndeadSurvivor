@@ -7,13 +7,16 @@ public class AchiveManager : MonoBehaviour
 {
     public GameObject[] lockCharacter;
     public GameObject[] unlockCharacter;
+    public GameObject uiNotice;
 
     enum Achive { UnlockPurple, UnlockOrange }
     Achive[] achives;
+    WaitForSecondsRealtime wait;
 
     private void Awake()
     {
         achives = (Achive[])Enum.GetValues(typeof(Achive));
+        wait = new WaitForSecondsRealtime(5);
 
         if(!PlayerPrefs.HasKey("MyData"))
         {
@@ -31,6 +34,11 @@ public class AchiveManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        UnlockCharacter();
+    }
+
     void UnlockCharacter()
     {
         for(int index = 0; index < lockCharacter.Length; index++)
@@ -41,5 +49,50 @@ public class AchiveManager : MonoBehaviour
             unlockCharacter[index].SetActive(isUnlock);
 
         }
+    }
+
+    private void LateUpdate()
+    {
+        foreach(Achive achive in achives)
+        {
+            CheckAchive(achive);
+        }
+    }
+
+    void CheckAchive(Achive achive)
+    {
+        bool isAchive = false;
+
+        switch (achive)
+        {
+            case Achive.UnlockPurple:
+                isAchive = Gamemanager.instance.kill >= 10;
+                break;
+            case Achive.UnlockOrange:
+                isAchive = Gamemanager.instance.gameTime == Gamemanager.instance.maxGameTime;
+                break;
+        }
+
+        if(isAchive && PlayerPrefs.GetInt(achive.ToString()) == 0)
+        {
+            PlayerPrefs.SetInt(achive.ToString(), 1);
+
+            for(int index = 0; index < uiNotice.transform.childCount; index++)
+            {
+                bool isActive = index == (int)achive;
+                uiNotice.transform.GetChild(index).gameObject.SetActive(isActive);
+            }
+
+            StartCoroutine(NoticeRoutine());
+        }
+    }
+
+    IEnumerator NoticeRoutine()
+    {
+        uiNotice.SetActive(true);
+
+        yield return wait;
+
+        uiNotice.SetActive(false);
     }
 }
