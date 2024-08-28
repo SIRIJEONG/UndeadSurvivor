@@ -41,6 +41,9 @@ public class Gamemanager : MonoBehaviour
         player.gameObject.SetActive(true);
         uiLevelUp.Select(playerId % 2);
         Resume();
+
+        AudioManager.instance.PlayerSfx(AudioManager.Sfx.Select);
+        Debug.Log("소리가 나라!");
     }
 
     public void GameOver()
@@ -59,6 +62,9 @@ public class Gamemanager : MonoBehaviour
         uiResult.gameObject.SetActive(true);
         uiResult.Lose();
         Stop();
+
+        AudioManager.instance.PlayerSfx(AudioManager.Sfx.Lose);
+
     }
 
 
@@ -80,6 +86,9 @@ public class Gamemanager : MonoBehaviour
         uiResult.gameObject.SetActive(true);
         uiResult.Win();
         Stop();
+
+        AudioManager.instance.PlayerSfx(AudioManager.Sfx.Win);
+
     }
 
     public void GameRetry()
